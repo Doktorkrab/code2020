@@ -1,0 +1,78 @@
+\documentclass[12pt,a4paper]{report}
+
+\usepackage{cmap}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{graphicx}
+\usepackage{amsthm,amsmath,amssymb}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{epigraph}
+\usepackage{import}
+\usepackage{pdfpages}
+\usepackage{transparent}
+
+\newcommand{\incfig}[2][1]{%
+    \def\svgwidth{#1\columnwidth}
+    \import{./figures/}{#2.pdf_tex}
+}
+
+\pdfsuppresswarningpagegroup=1
+
+
+
+\usepackage[russian,colorlinks=true,urlcolor=red,linkcolor=blue]{hyperref}
+\usepackage{enumerate}
+\usepackage{datetime}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{verbatim}
+\usepackage{tikz}
+\usetikzlibrary{arrows,decorations.markings,decorations.pathmorphing}
+\usepackage{pgfplots}
+
+\usepackage{ifthen}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{paralist}
+\usepackage{tcolorbox}
+\usepackage{todonotes}
+
+\tcbuselibrary{breakable}
+
+\graphicspath{{pictures/}}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+%\usepackage{tabls}
+%\usepackage{tabularx}
+%\usepackage{xifthen}
+%\listfiles
+\newtheorem{theorem}{Теорема}
+
+\newtheorem*{lemma}{Лемма}
+\newtheorem*{remark}{Замечение}
+\newtheorem{problem}[theorem]{Задача}
+\sloppy
+\newenvironment{temp}{\begin{tcolorbox}[
+    arc=0mm,
+    colback=white,
+    colframe=red!60!black,
+    title=temp,
+    fonttitle=\sffamily,
+    breakable
+]}{\end{tcolorbox}}
+\newcommand*{\defeq}{\stackrel{\text{def}}{=}}
+\setlength\epigraphwidth{.8\textwidth}
+
+\newlength{\tmplen}
+\newlength{\tmpwidth}
+\newcounter{listcounter}
+
+\begin{document}
+Для решения данной задачи применим дерево отрезков. Для начала определим, что мы будем хранить в каждой вершине, а именно 3 величины: расстояние, если мы не пропускаем ни одной вершин; расстояние, если мы пропускаем одну вершину, но при этом эта вершина не первая; расстояние, если мы пропускаем одну вершину, и эта вершина не последняя. Заметим, что если мы знаем данные величины для отрезка $[l; r]$, то ответ это минимум по данным величинам.\par
+Теперь научимся мерджить два отрезка в дереве отрезков. В этом нет ничего сложного: очевидно для расстояния, когда мы не пропускаем; а если мы пропускаем начало, то нам надо взять минимальную из двух сумм: или мы ничего не пропускаем в левом блоке и пропускаем что-нибудь в правом(соотвественно минимум по расстояниям, где мы пропускаем) или мы в левом блоке пропускаем не в начала, а в правом не пропускаем. Аналогично для правого. Важно заметить, что данная операция ассоциативна (довольно легко проверить данный факт, просто это очень муторно и не интересно, просто поверьте мне, ну рили). Заметим, что сливание отрезков работает за $\mathcal{O}(1)$ \par
+Тогда мы можем построить дерево отрезков перед началом операций за $\mathcal{O}(n)$, а затем обрабатывать запросы за $\mathcal{O}(\log n)$. Тогда суммарная асимптотика получается $\mathcal{O}(n + q\cdot \log n)$
+\end{document}
+

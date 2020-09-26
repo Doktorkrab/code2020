@@ -1,0 +1,79 @@
+\documentclass[12pt,a4paper]{report}
+
+\usepackage{cmap}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{graphicx}
+\usepackage{amsthm,amsmath,amssymb}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{epigraph}
+\usepackage{import}
+\usepackage{pdfpages}
+\usepackage{transparent}
+
+\newcommand{\incfig}[2][1]{%
+    \def\svgwidth{#1\columnwidth}
+    \import{./figures/}{#2.pdf_tex}
+}
+
+\pdfsuppresswarningpagegroup=1
+
+
+
+\usepackage[russian,colorlinks=true,urlcolor=red,linkcolor=blue]{hyperref}
+\usepackage{enumerate}
+\usepackage{datetime}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{verbatim}
+\usepackage{tikz}
+\usetikzlibrary{arrows,decorations.markings,decorations.pathmorphing}
+\usepackage{pgfplots}
+
+\usepackage{ifthen}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{paralist}
+\usepackage{tcolorbox}
+\usepackage{todonotes}
+
+\tcbuselibrary{breakable}
+
+\graphicspath{{pictures/}}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+%\usepackage{tabls}
+%\usepackage{tabularx}
+%\usepackage{xifthen}
+%\listfiles
+\newtheorem{theorem}{Теорема}
+
+\newtheorem*{lemma}{Лемма}
+\newtheorem*{remark}{Замечение}
+\newtheorem{problem}[theorem]{Задача}
+\sloppy
+\newenvironment{temp}{\begin{tcolorbox}[
+    arc=0mm,
+    colback=white,
+    colframe=red!60!black,
+    title=temp,
+    fonttitle=\sffamily,
+    breakable
+]}{\end{tcolorbox}}
+\newcommand*{\defeq}{\stackrel{\text{def}}{=}}
+\setlength\epigraphwidth{.8\textwidth}
+
+\newlength{\tmplen}
+\newlength{\tmpwidth}
+\newcounter{listcounter}
+
+\begin{document}
+Для начала поймем, когда нельзя построить перестановку по данным ограничениям. Для этого, построим граф, где вершинами будут индексы элементов перестановки, а ребра построим по слежующему правилу: для каждого ограничения из каждого элемента из отрезка $[a_i;b_i]$ проведем ориентированное ребро в каждый элемент из отрезка $[c_i;d_i]$. У нас получился полный граф сравнений. Заметим, что если в данном графе есть цикл, то получается, что существует какой-то элемент $x$ который меньше самого себя. Тогда по данным ограничениям построить перестановку невозможно. \par
+Иначе, так как наш граф не имеет циклов, то мы можем построить топологическую сортировку и расставить числа в порядке, обратном топологической сортировке. Данное решение работает за $\mathcal{O}(n+L^2)$ \par
+Теперь для каждого индекса перестановки будем поддерживать количество еще необработанных ограничений, где данный индекс лежит в отрезке $[c_i;d_i]$. Также будем поддерживать очередь из индексов, в которых данная величина(для удобства назовем её $cnt_i$) достигла $0$. Также для каждого ограничения будем поддерживать величину $cntseg_i$ --- количество элементов из отрезка $[a_i;b_i]$, которые еще не обработаны. Теперь рассмотрим очередной элемент $x$ из очереди. Поставим на позицию $x$ минимальное непоставленное число. Теперь рассмотрим все ограничения, где $x$ лежит в отрезке $[a_i;b_i]$. У каждого такого отрезка уменьшим $cntseg_i$ на 1, и, если $cntseg_i$ стало равно $0$, то у каждого элемента $y$ из отрезка $[c_i;d_i]$ вычтем $1$ из $cnt_y$. Если $cnt_y$ стало равно $0$, то добавим $y$ в очередь. \par
+Заметим, что если после конца работы алгоритма остались необработанные элементы, то в графе сравнений есть цикл. Также несложно заметить, что мы рассматриваем элементы в порядке, обратном топологичской сортировке. \par
+Теперь оценим асимптотику: каждый элемент мы добавим и удалим из очереди ровно 1 раз. Для каждого элемента мы обновляем $cntseg$ за количество отрезков, в которых он находится в отрезке $[a_i;b_i]$, т.е. суммарно мы обновим $cntseg$ не больше, чем $\mathcal{O}(L)$ раз. Также $cnt$ мы обновим не больше, чем $\mathcal{O}(L)$ раз из тех же соображений. Следовательно алгоритм будет работать за $\mathcal(O)(n + L)$. 
+\end{document}
