@@ -39,7 +39,7 @@ ll e(ll x){
 int solve() {
     if (!(cin >> N >> K))
         return 1;
-    int n = (int)(1e8 + 7);
+    int n = (int)(1e9 + 7);
     vector<int> euler(n + 1, -1);
     //ll sum = 1;
     //ll cnt1 = 1;
