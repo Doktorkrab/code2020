@@ -24,15 +24,15 @@ int upd[MAXN];
 
 struct SegmentTree {
     struct Node {
-        int mx, to_push;
+        int mn, to_push;
     };
     Node tree[4 * MAXN];
     int N = 1;
 
     void push(int v) {
         if (v < N) {
-            tree[2 * v].mx += tree[v].to_push;
-            tree[2 * v + 1].mx += tree[v].to_push;
+            tree[2 * v].mn += tree[v].to_push;
+            tree[2 * v + 1].mn += tree[v].to_push;
             tree[2 * v].to_push += tree[v].to_push;
             tree[2 * v + 1].to_push += tree[v].to_push;
         }
@@ -48,7 +48,7 @@ struct SegmentTree {
         if (tr <= l || r <= tl)
             return;
         if (l <= tl && tr <= r) {
-            tree[v].mx += x;
+            tree[v].mn += x;
             tree[v].to_push += x;
             return;
         }
@@ -56,18 +56,18 @@ struct SegmentTree {
         int tm = (tl + tr) / 2;
         upd_seg(v * 2, tl, tm, l, r, x);
         upd_seg(v * 2 + 1, tm, tr, l, r, x);
-        tree[v].mx = max(tree[2 * v].mx, tree[2 * v + 1].mx);
+        tree[v].mn = max(tree[2 * v].mn, tree[2 * v + 1].mn);
     }
 
     int get(int v, int tl, int tr, int l, int r) {
         if (tr <= l || r <= tl)
             return 0;
         if (l <= tl && tr <= r)
-            return tree[v].mx;
+            return tree[v].mn;
         push(v);
         int tm = (tl + tr) / 2;
         int ret = max(get(v * 2, tl, tm, l, r), get(v * 2 + 1, tm, tr, l, r));
-        tree[v].mx = max(tree[2 * v].mx, tree[2 * v + 1].mx);
+        tree[v].mn = max(tree[2 * v].mn, tree[2 * v + 1].mn);
         return ret;
     }
 

@@ -77,12 +77,6 @@ struct ConvexHull {
             else
                 r = m;
         }
-        // cerr << lines[l].k << ' ' << lines[l].b << ' ' << x << ' ' << lines[l](x) << '\n';
-        // for (ll i : pr)
-        //     cerr << i << ' ';
-        // cerr << '\n';
-        // for (Line a : lines)
-        //     cerr << a.k << ' ' << a.b << '\n';
         return lines[l](x);
     }
 };

@@ -24,3 +24,9 @@ add_executable(q q.cpp)
 add_executable(m m.cpp)
 
 add_executable(h h.cpp)
+
+add_executable(e e.cpp)
+
+add_executable(l l.cpp)
+
+add_executable(e_slow.cpp e_slow.cpp)
