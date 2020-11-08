@@ -18,3 +18,5 @@ add_executable(gen gen.cpp)
 add_executable(g g.cpp)
 
 add_executable(b b.cpp)
+
+add_executable(i i.cpp)

@@ -1,11 +1,11 @@
-make i
-make i_slow
+make l
+make l_slow
 make gen
 
 for ((i = 1; ; i++)) ; do 
     ./gen > test || break
-    ./i < test > fast || break
-    ./i_slow < test > slow || break
+    ./l < test > fast || break
+    ./l_slow < test > slow || break
     diff fast slow || break
     echo -n '.'
 done

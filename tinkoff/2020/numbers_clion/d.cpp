@@ -19,33 +19,113 @@ using ll = long long;
 
 int n;
 const int MAXN = 5e4 + 7;
+
 struct Segment {
-    int l = 0, r = MAXN; // [l;r)
-    int min = 0, max = 0;
-    int g = 0, sum = 0;
-    int max_sum = 0;
+    int g = 1;
+    deque<pair<int, ll>> stack;
+    multiset<ll> mins;
+
+    Segment() = default;
+
+    Segment(int x, ll sm) {
+        stack.emplace_back(x, sm);
+        mins.insert(x + sm);
+        g = abs(x);
+    }
+
+    void merge(Segment &oth) {
+        if (!SZ(oth.stack))
+            return;
+//        cout << "MERGE\n";
+//        for (auto[a, b] : stack)
+//            cout << "{" << a << ", " << b << "} ";
+//        cout << "\n\n";
+
+//        for (auto[a, b] : oth.stack)
+//            cout << "{" << a << ", " << b << "} ";
+//        cout << "\n\n";
+
+        oth.mins.erase(oth.mins.find(oth.stack.front().first + oth.stack.front().second));
+        while (SZ(stack) && stack.back().first <= oth.stack.front().first) {
+            auto[a, b] = stack.back();
+            oth.stack.front().second = min(oth.stack.front().second, b);
+            mins.erase(mins.find(a + b));
+            stack.pop_back();
+        }
+        oth.mins.insert(oth.stack.front().first + oth.stack.front().second);
+//        cout << "SZ " << SZ(stack) << ' ' << SZ(oth.stack) << '\n';
+        if (SZ(stack) < SZ(oth.stack)) {
+            reverse(ALL(stack));
+            for (const auto &x : stack) {
+                oth.stack.push_front(x);
+                oth.mins.insert(x.first + x.second);
+            }
+            swap(stack, oth.stack);
+            swap(mins, oth.mins);
+        } else {
+            for (const auto &x : oth.stack) {
+                stack.push_back(x);
+                mins.insert(x.first + x.second);
+            }
+        }
+    }
 };
 
-vector<Segment> segments[MAXN];
 int arr[MAXN];
-inline Segment merge(const Segment& a, const Segment& b){
+ll sum[MAXN];
 
-}
 int solve() {
     if (!(cin >> n))
         return 1;
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++) {
         cin >> arr[i];
-    for (int i = 0; i < n; i++){
-        segments[i + 1].push_back({i, i + 1, arr[i], arr[i], arr[i], arr[i]});
-        for (int j = SZ(segments[i]) - 1; j >= 0; j--){
-            int new_g = gcd(segments[i][j].g, segments[i + 1].back().g);
-            if (new_g == segments[i + 1].back().g){
-
-            }
-
-        }
+        sum[i + 1] = sum[i] + arr[i];
     }
+    ll ans = 0;
+    vector<Segment> have;
+    for (int i = 0; i < n; i++) {
+        vector<Segment> now = {Segment(arr[i], sum[i])};
+        reverse(ALL(have));
+        for (Segment &oth : have) {
+//            cout << "!" << oth.g << ' ' << now.back().g << '\n';
+            ll g = gcd(oth.g, now.back().g);
+//            cout << '\t' << g << '\n';
+            if (g == now.back().g) {
+                oth.g = g;
+                oth.merge(now.back());
+                swap(oth, now.back());
+            } else {
+                oth.g = g;
+                now.push_back(oth);
+            }
+        }
+        for (int j = 1; j < SZ(now); j++) {
+            ll mn = TMAX(ll) / 2;
+            int cnt = 0;
+            Segment &seg = now[j];
+            while (SZ(seg.stack) && seg.stack.back().first <= now[j - 1].stack.back().first) {
+                cnt++;
+                auto[a, b] = seg.stack.back();
+                seg.mins.erase(seg.mins.find(a + b));
+                mn = min(mn, b);
+                seg.stack.pop_back();
+            }
+            if (cnt) {
+                seg.mins.insert(mn + now[j - 1].stack.back().first);
+                seg.stack.emplace_back(now[j - 1].stack.back().first, mn);
+            }
+        }
+        reverse(ALL(now));
+        swap(now, have);
+        for (Segment &s : have) {
+//            cout << sum[i + 1] - (*s.mins.begin()) << ' ' << (*s.mins.begin()) << ' ' << s.g << '\n';
+//            for (auto[a, b] : s.stack)
+//                cout << a << ' ' << b << '\n';
+            ans = max(ans, s.g * (sum[i + 1] - (*s.mins.begin())));
+        }
+//        cout << "------\n";
+    }
+    cout << ans << '\n';
     return 0;
 }
 
