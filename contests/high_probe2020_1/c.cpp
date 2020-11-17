@@ -17,20 +17,28 @@ using ll = long long;
 #define ass(X) {}
 #endif
  
-int n, d;
-
-const int MAXN = 5e4 + 7;
-const int MAXD = 0
-
-struct SegmentTree{
-    struct Node{
-
-    };
-};
- 
+int n, m, k;
+const int MAXN = 505;
+int fld[MAXN][MAXN];
 int solve() {
-    if (!(cin >> n))
+    if (!(cin >> n >> m >> k))
         return 1;
+    for (int i = 0; i < k; i++) {
+        int x, y;
+        cin >> x >> y;
+        --x, --y;
+        fld[x][y] = 1;
+    }
+    if (n == 1){
+        vector<int> ans;
+        for (int i = 0; i < m; i++)
+            if (!fld[0][i])
+                ans.push_back(i);
+        cout << ans.size() << '\n';
+        for (int i : ans)
+            cout << "1 " << i + 1 << '\n';
+        return 0;
+    }
     return 0;
 }
  

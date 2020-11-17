@@ -22,3 +22,7 @@ add_executable(h1 h1.cpp)
 add_executable(gen gen.cpp)
 
 add_executable(b b.cpp)
+
+add_executable(l l.cpp)
+
+add_executable(l1 l1.cpp)
