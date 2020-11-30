@@ -36,3 +36,5 @@ add_executable(l_slow l_slow.cpp)
 add_executable(e1 e1.cpp)
 
 add_executable(e2 e2.cpp)
+
+add_executable(g g.cpp)

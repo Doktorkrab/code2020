@@ -3,7 +3,7 @@ project(dp_optimizations)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_compile_options(-g -O0)
+#add_compile_options(-g3 -O0)
 add_executable(dp_optimizations main.cpp)
 add_executable(a a.cpp)
 
@@ -30,3 +30,5 @@ add_executable(e e.cpp)
 add_executable(l l.cpp)
 
 add_executable(e_slow.cpp e_slow.cpp)
+
+add_executable(o o.cpp)

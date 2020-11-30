@@ -22,3 +22,5 @@ add_executable(c c.cpp)
 add_executable(k k.cpp)
 
 add_executable(g g.cpp)
+
+add_executable(e e.cpp)
