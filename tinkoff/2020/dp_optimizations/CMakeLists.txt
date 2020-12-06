@@ -32,3 +32,5 @@ add_executable(l l.cpp)
 add_executable(e_slow.cpp e_slow.cpp)
 
 add_executable(o o.cpp)
+
+add_executable(p1 p1.cpp)
