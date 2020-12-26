@@ -1,3 +1,6 @@
+#ifndef LOCAL
+#define FILE_NAME
+#endif
 #include <bits/stdc++.h>
 #include <ostream>
  
@@ -30,6 +33,10 @@ signed main() {
     ios::sync_with_stdio(0);
     cin.tie(0);
     cout.tie(0);
+#ifdef FILE_NAME
+    freopen(FILE_NAME ".in", "r", stdin);
+    freopen(FILE_NAME ".out", "w", stdout);
+#endif
     int tests = 1e9;
 //    cin >> tests;
     for (int i = 1; i <= tests; i++) {
