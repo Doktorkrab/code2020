@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 3.17)
+project(round)
+
+set(CMAKE_CXX_STANDARD 17)
+
+add_compile_options(-O0 -g3)
+add_executable(random_gen random_points_gen.cpp)
+add_executable(validator validator.cpp)
+add_executable(brute ushakov_n5.cpp)
+add_executable(random_gen_fixed random_gen_fixed_n.cpp)
+add_executable(corners_gen corners_gen.cpp)
+add_executable(nlogn morozov-ushakov_nlogn_overflow.cpp)
+add_executable(nlogn1 morozov-ushakov_nlogn_cross.cpp)
+add_executable(anti_budalnik_gen anti_budalnik_gen.cpp)
+add_executable(anti_budalnik_gen_2 anti_budalnik_gen_2.cpp)
+add_executable(budalnik_slow budalnik_slow.cpp)
+add_executable(cross_gen cross_gen.cpp)
+add_executable(big_convex_gen big_convex_gen.cpp)
