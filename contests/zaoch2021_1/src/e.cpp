@@ -40,59 +40,59 @@ string print_ans(int mask){
         ans.push_back('0');
     return ans;
 }
-bool dfs(int line, int registers) {
-    used[line][registers] = 1;
+bool dfs_small(int line, int registers) {
+    used[v][p] = 1;
 //    cout << events[line].type << ' ' << print_ans(registers) << '\n';
-    if (events[line].type == "begin"){
-        bool ret = dfs(1, registers);
-        used[line][registers] = 2;
+    if (events[v].type == "begin"){
+        bool ret = dfs_small(1, p);
+        used[v][p] = 2;
         return ret;
     }
-    if (events[line].type == "end"){
-        used[line][registers] = 2;
+    if (events[v].type == "end"){
+        used[v][p] = 2;
         return false;
     }
-    int next = registers;
-    int from = events[line].from;
-    int to = events[line].to;
-    int next_line = line + 1;
+    int next = p;
+    int from = events[v].from;
+    int to = events[v].to;
+    int next_line = v + 1;
     
-    if (events[line].type != "jump") {
+    if (events[v].type != "jump") {
         next &= ~(1 << to);
     }
-    if (events[line].type == "and") {
-        int reg1 = (registers >> from) & 1;
-        int reg2 = (registers >> to) & 1;
+    if (events[v].type == "and") {
+        int reg1 = (p >> from) & 1;
+        int reg2 = (p >> to) & 1;
         next |= ((reg1 & reg2) << to);
     }
-    if (events[line].type == "or") {
-        int reg1 = (registers >> from) & 1;
-        int reg2 = (registers >> to) & 1;
+    if (events[v].type == "or") {
+        int reg1 = (p >> from) & 1;
+        int reg2 = (p >> to) & 1;
         next |= ((reg1 | reg2) << to);
     }
-    if (events[line].type == "xor") {
-        int reg1 = (registers >> from) & 1;
-        int reg2 = (registers >> to) & 1;
+    if (events[v].type == "xor") {
+        int reg1 = (p >> from) & 1;
+        int reg2 = (p >> to) & 1;
 //        cout << reg1 << ' ' << reg2 << '\n';
 //        cout << to << ' ' << from << '\n';
 //        cout << print_ans(next) << '\n';
         next |= ((reg1 ^ reg2) << to);
     }
-    if (events[line].type == "move") {
-        int reg1 = (registers >> from) & 1;
+    if (events[v].type == "move") {
+        int reg1 = (p >> from) & 1;
         next |= ((reg1) << to);
     }
-    if (events[line].type == "set") {
+    if (events[v].type == "set") {
         next |= (from << to);
     }
-    if (events[line].type == "not"){
-        int reg1 = (registers >> to) & 1;
+    if (events[v].type == "not"){
+        int reg1 = (p >> to) & 1;
         next |= ((reg1 ^ 1) << to);
     }
-    if (events[line].type == "jump"){
-        int reg = (registers >> to) & 1;
+    if (events[v].type == "jump"){
+        int reg = (p >> to) & 1;
         if (reg)
-            next_line = events[line].from;
+            next_line = events[v].from;
     }
 
 
@@ -102,7 +102,7 @@ bool dfs(int line, int registers) {
     }
     if (used[next_line][next] == 1)
         return true;
-    bool ret = dfs(next_line, next);
+    bool ret = dfs_small(next_line, next);
     used[next_line][next] = 2;
     return ret;
 }
@@ -124,10 +124,10 @@ int solve() {
         }
         events[i].type = s;
     }
-//    cout << dfs(0, 1) << '\n';
+//    cout << dfs_small(0, 1) << '\n';
 //    return 0;
     for (int mask = 0; mask < (1 << k); mask++){
-        if (used[0][mask] == 0 && dfs(0, mask)){
+        if (used[0][mask] == 0 && dfs_small(0, mask)){
             cout << "No\n" << print_ans(mask) << '\n';
             return 0;
         }

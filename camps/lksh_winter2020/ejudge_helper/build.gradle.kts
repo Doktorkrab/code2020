@@ -20,8 +20,11 @@ dependencies {
 //    implementation(group = "com.github.kittinunf.fuel", name = "fuel", version = "-SNAPSHOT")
 //    implementation(group = "com.github.kittinunf.fuel", name = "fuel-json", version = "-SNAPSHOT")
 //    implementation(group = "com.github.kittinunf.fuel", name = "fuel-coroutines", version = "-SNAPSHOT")
-    implementation("com.squareup.okhttp3:okhttp:4.9.0")
-
+//    implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation (platform("org.http4k:http4k-bom:4.1.1.1"))
+    implementation ("org.http4k:http4k-core")
+    implementation ("org.http4k:http4k-server-netty")
+    implementation ("org.http4k:http4k-client-apache")
 }
 
 tasks.test {

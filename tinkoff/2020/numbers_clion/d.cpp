@@ -36,14 +36,6 @@ struct Segment {
     void merge(Segment &oth) {
         if (!SZ(oth.stack))
             return;
-//        cout << "MERGE\n";
-//        for (auto[a, b] : stack)
-//            cout << "{" << a << ", " << b << "} ";
-//        cout << "\n\n";
-
-//        for (auto[a, b] : oth.stack)
-//            cout << "{" << a << ", " << b << "} ";
-//        cout << "\n\n";
 
         oth.mins.erase(oth.mins.find(oth.stack.front().first + oth.stack.front().second));
         while (SZ(stack) && stack.back().first <= oth.stack.front().first) {
