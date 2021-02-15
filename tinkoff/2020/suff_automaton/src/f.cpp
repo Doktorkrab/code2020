@@ -63,6 +63,7 @@ struct SuffAutomaton {
         nodes[clone].len = nodes[last].len + 1;
         nodes[clone].p = last;
         nodes[clone].pc = c;
+        nodes[clone].is_terminal = 0;
         while (last != -1 && nodes[last].go[c] == b) {
             nodes[last].go[c] = clone;
             last = nodes[last].link;
@@ -78,9 +79,11 @@ struct SuffAutomaton {
             now = add(now, c - 'a');
         return now;
     }
-    void insert(const string& s){
+
+    void insert(const string &s) {
         int x = add(s);
         nodes[x].is_terminal = 1;
+//        cout << s << ' ' << x << '\n';
     }
 
     void remove(const string &s) {
@@ -91,22 +94,25 @@ struct SuffAutomaton {
     int t = 0;
     ll ans = 0;
 
-    ll subautomaton(int v, bool good = 1) {
+    ll up_link(int v) {
         if (v == -1)
             return 0;
         if (nodes[v].last_used == t) {
-            cout << '\t' << v << ' ' << nodes[v].is_terminal << "<\n";
             ans += nodes[v].cnt;
             return nodes[v].cnt;
         }
-        nodes[v].cnt = 0;
         nodes[v].last_used = t;
-        cout << '\t' << v << ' ' << nodes[v].is_terminal << '\n';
+//        cout << '\t' << v << ' ' << nodes[v].is_terminal << '\n';
         ans += nodes[v].is_terminal;
-        nodes[v].cnt = nodes[v].is_terminal + subautomaton(nodes[v].link, false);
-        if (good)
-            subautomaton(nodes[v].p, true);
+        nodes[v].cnt = nodes[v].is_terminal + up_link(nodes[v].link);
         return nodes[v].cnt;
+    }
+
+    void subautomaton(int v) {
+        if (v == -1)
+            return;
+        up_link(v);
+        subautomaton(nodes[v].p);
     }
 
     ll get_ans(const string &s) {
@@ -116,6 +122,7 @@ struct SuffAutomaton {
         t++;
         return ans;
     }
+
     void print() {
         for (int i = 0; i < sz; i++) {
             for (int j = 0; j < ALP; j++)
@@ -136,17 +143,19 @@ int solve() {
     char c;
     string s;
     SuffAutomaton<3, (int) (1e7) + 7> automaton;
+    ll was = 0;
     for (int i = 0; i < n; i++) {
         cin >> c >> s;
+        rotate(s.begin(), s.begin() + (was % SZ(s)), s.end());
         if (c == '+')
             automaton.insert(s);
         if (c == '-')
             automaton.remove(s);
         if (c == '?')
-            cout << automaton.get_ans(s) << '\n';
+            cout << (was = automaton.get_ans(s)) << '\n';
 //        cout << '\n';
     }
-            automaton.print();
+//            automaton.print();
     return 0;
 }
 
