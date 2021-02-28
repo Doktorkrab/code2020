@@ -17,3 +17,6 @@ add_executable(i src/i.cpp)
 add_executable(g src/g.cpp)
 
 add_executable(h src/h.cpp)
+
+add_executable(h1 src/h1.cpp)
+add_executable(gen src/gen.cpp)

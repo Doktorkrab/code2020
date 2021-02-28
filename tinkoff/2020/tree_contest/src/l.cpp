@@ -23,7 +23,7 @@ const int MAXN = 3e5 + 7;
 pair<int, int> g[MAXN][ALP];
 int sz[MAXN];
 int cnt[MAXN];  // cnt vertexes on level i
-int ans[MAXN];  // ans for depth i
+int ans[MAXN];  // ans for dp i
 vector<int> available;
 
 int merge(int now, int v) {

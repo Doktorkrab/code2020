@@ -20,3 +20,13 @@ add_executable(a src/a.cpp)
 add_executable(a_slow src/a_slow.cpp)
 
 add_executable(l src/l.cpp)
+
+add_executable(h src/h.cpp)
+
+add_executable(h_slow src/h_slow.cpp)
+
+add_executable(g src/g.cpp)
+
+add_executable(m src/m.cpp)
+
+add_executable(m1 src/m1.cpp)
