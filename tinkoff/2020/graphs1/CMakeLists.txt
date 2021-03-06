@@ -3,6 +3,7 @@ project(graphs1)
 
 set(CMAKE_CXX_STANDARD 17)
 
+add_compile_options(-O0 -g3)
 add_executable(graphs1 main.cpp)
 add_executable(b src/b.cpp)
 
@@ -21,3 +22,8 @@ add_executable(n src/n.cpp)
 add_executable(o src/o.cpp)
 
 add_executable(q src/q.cpp)
+
+add_executable(h src/h.cpp)
+
+add_executable(h1 src/h1.cpp)
+add_executable(gen src/gen.cpp)
