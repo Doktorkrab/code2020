@@ -9,3 +9,5 @@ add_executable(h src/h.cpp)
 add_executable(b src/b.cpp)
 add_executable(gen src/gen.cpp)
 add_executable(f src/f.cpp)
+
+add_executable(e src/e.cpp)
