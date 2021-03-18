@@ -12,3 +12,5 @@ add_executable(b1 src/b1.cpp)
 add_executable(gen src/gen.cpp)
 
 add_executable(c_slow src/c_slow.cpp)
+
+add_executable(d1 src/d1.cpp)
