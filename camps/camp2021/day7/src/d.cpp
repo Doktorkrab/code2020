@@ -1,6 +1,6 @@
-#pragma GCC optimize("Ofast")
-#pragma GCC optimize("O3")
-#pragma GCC optimize("unroll-loops")
+//#pragma GCC optimize("Ofast")
+//#pragma GCC optimize("O3")
+//#pragma GCC optimize("unroll-loops")
 #include <bits/stdc++.h>
 #include <ostream>
 
@@ -220,81 +220,114 @@ bool is_digit(const string& s){
         return false;
     return true;
 }
-unordered_map<string, unordered_map<int, string>> kek;
-unordered_map<int, string> get_values(const string& s){
-    if (kek.count(s))
-        return kek[s];
-    unordered_map<int, string> values;
-    if (is_digit(s)) {
-        values[stoi(s)] = s;
+const int MAXMEM = 5;
+const int MAXN = 1e5;
+const int powers10[] = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000};
+vector<int> values[MAXMEM + 1][MAXN];
+
+vector<int> get_values(int len, int x){
+    if (len <= MAXMEM && SZ(values[len][x]))
+        return values[len][x];
+    vector<int> cur;
+    if (x >= powers10[len - 1] || len == 1)
+        cur.push_back(x);
+    for (int i = 1; i < len; i++){
+        int lft = x / powers10[len - i];
+        int rgt = x % powers10[len - i];
+        vector<int> calc_l = get_values(i, lft);
+        vector<int> calc_r = get_values(len - i, rgt);
+        for (int a : calc_l)
+            for (int b : calc_r){
+                cur.push_back(a + b);
+                cur.push_back(a * b);
+                if (a - b >= 0)
+                    cur.push_back(a - b);
+                if (-a + b >= 0)
+                    cur.push_back(-a + b);
+                if (b != 0 && a % b == 0)
+                    cur.push_back(a / b);
+            }
     }
-    for (int i = 1; i < SZ(s); i++){
-        auto a = get_values(s.substr(0, i));
-        auto b = get_values(s.substr(i));
-        for (auto& [v, sv] : a)
-            for (auto& [v1, sv1] : b){
-                if (SZ(s) == 5){
-                    map<int, string> keke;
-                    keke[v + v1].clear();
-                    keke[v + v1].append("(").append(sv).append(")+(").append(sv1).append(")");
-                    keke[v * v1].clear();
-                    keke[v * v1].append("(").append(sv).append(")*(").append(sv1).append(")");
-                    if (v - v1 >= 0) {
-                        keke[v - v1].clear();
-                        keke[v - v1].append("(").append(sv).append(")-(").append(sv1).append(")");
-                    }
-                    if (v1 != 0 && v % v1 == 0) {
-                        keke[v / v1].clear();
-                        keke[v / v1].append("(").append(sv).append(")/(").append(sv1).append(")");
-                    }
-                    for (int x = 0; x < 10; x++){
-                        for (auto& [a, b] : keke)
-                            if (x + a == 100 || x * a == 100 || x - a == 100)
-                                values[a] = b;
-                    }
+    sort(ALL(cur));
+    cur.resize(unique(ALL(cur)) - cur.begin());
+    if (len <= MAXMEM)
+        values[len][x] = cur;
+    return cur;
+}
+
+void print_ans(int len, int x, int need){
+    if (x >= powers10[len - 1] || len == 1){
+        if (x == need){
+            writeInt(x);
+            return;
+        }
+        if (x == -need){
+            writeInt(x);
+            return;
+        }
+    }
+    for (int i = 1; i < len; i++){
+        int lft = x / powers10[len - i];
+        int rgt = x % powers10[len - i];
+        vector<int> val_l = get_values(i, lft);
+        vector<int> val_r = get_values(len - i, rgt);
+        for (int a : val_l)
+            for (int b : val_r){
+                if (a + b == need){
+                    writeChar('(');
+                    print_ans(i, lft, a);
+                    writeWord(")+(");
+                    print_ans(len - i, rgt, b);
+                    writeChar(')');
+                    return;
                 }
-                else {
-                    values[v + v1].clear();
-                    values[v + v1].append("(").append(sv).append(")+(").append(sv1).append(")");
-                    values[v * v1].clear();
-                    values[v * v1].append("(").append(sv).append(")*(").append(sv1).append(")");
-                    if (v - v1 >= 0) {
-                        values[v - v1].clear();
-                        values[v - v1].append("(").append(sv).append(")-(").append(sv1).append(")");
-                    }
-                    if (v1 != 0 && v % v1 == 0) {
-                        values[v / v1].clear();
-                        values[v / v1].append("(").append(sv).append(")/(").append(sv1).append(")");
-                    }
-                    if (SZ(s) == 6 && values.count(100)) {
-                        return kek[s] = values;
-                    }
-                    if (SZ(s) == 6)
-                        values.clear();
+                if (a * b == need){
+                    writeChar('(');
+                    print_ans(i, lft, a);
+                    writeWord(")*(");
+                    print_ans(len - i, rgt, b);
+                    writeChar(')');
+                    return;
+                }
+                if (a - b == need){
+                    writeChar('(');
+                    print_ans(i, lft, a);
+                    writeWord(")-(");
+                    print_ans(len - i, rgt, b);
+                    writeChar(')');
+                    return;
+                }
+                if (-a + b == need){
+                    writeChar('-');
+                    writeChar('(');
+                    print_ans(i, lft, a);
+                    writeWord(")+(");
+                    print_ans(len - i, rgt, b);
+                    writeChar(')');
+                    return;
+                }
+                if (b != 0 && a % b == 0 && a / b == need){
+                    writeChar('(');
+                    print_ans(i, lft, a);
+                    writeWord(")/(");
+                    print_ans(len - i, rgt, b);
+                    writeChar(')');
+                    return;
                 }
             }
     }
-    return kek[s] = values;
+    writeWord("No solution");
 }
 
 int solve() {
     clock_t start = clock();
     int i = 0;
-    while (clock() - start < CLOCKS_PER_SEC * 9.8) {
-        string x = to_string(i);
-        reverse(ALL(x));
-        while (SZ(x) < 6)
-            x.push_back('0');
-        reverse(ALL(x));
-        auto ans = get_values(x);
-        if (ans.count(100))
-            writeWord(ans[100].append("\n").c_str());
-        else
-            writeWord("No solution\n");
-        i++;
+    for (; i <= 999999; i++) {
+//        writeInt(i);
+//        writeWord(": ");
+        print_ans(6, i, 100);
+        writeChar('\n');
     }
-    for (; i <= 999999; i++)
-        writeWord("No solution\n");
     return 1;
 }
 

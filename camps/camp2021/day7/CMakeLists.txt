@@ -13,3 +13,4 @@ add_executable(b_slow src/b_slow.cpp)
 add_executable(c src/c.cpp)
 
 add_executable(d src/d.cpp)
+add_executable(d_denchik src/d_denchik.cpp)
