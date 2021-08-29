@@ -1,18 +1,18 @@
 #!/usr/bin/zsh
-make c
-make c1
+make d
+make d_bamboo
 make gen
 
 for (( i = 0; ; i++ )); do
-    ./gen > c.in || break
-    ./c > fast || break
-    ./c1 > slow || break
+    ./gen > d.in || break
+    ./d > fast || break
+    ./d_bamboo > slow || break
     diff fast slow  || break
     echo -n '.'
 done
 echo
 echo "Test: "
-cat c.in
+cat d.in
 echo "Fast: "
 cat fast
 echo "Slow: "
